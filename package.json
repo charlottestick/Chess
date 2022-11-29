@@ -19,7 +19,7 @@
     },
     "scripts": {
         "test": "jest",
-        "dev": "ts-node helloWorld.ts",
+        "dev": "ts-node src/index.ts",
         "check:type": "tsc --noEmit"
     },
     "repository": {
