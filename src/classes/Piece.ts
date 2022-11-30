@@ -33,17 +33,20 @@ export class Piece<PlayerColours = PlayerColour> {
     }
 }
 
-// What if we don't need a board data structure?
+// Proof of Concept that subclasses of Piece can be stored in Array<Piece>
+export class DebugPiece extends Piece {
+    constructor() {
+        super({ x: 0, y: 0 });
+    }
+}
 
-// Store an array of all the pieces, in no particular order, maybe pawns first for search optimisation
+let fakeBoard: Array<Piece> = [];
+let newPiece = new Piece({ x: 0, y: 0 });
+fakeBoard.push(newPiece);
+let newDebugPiece = new DebugPiece();
+fakeBoard.push(newDebugPiece);
+
 // Each piece holds its position, which player it's owned by, whether it's taken or not, maths for moving, array of valid moves
 
-// Only consideration is how do you check for occupancy?
-// Iterate over the whole array and check each piece's position? seems like a bad process, unnecessary search time
-// Maybe board only holds a marker for each piece?, then the position in question is indexed and can be queried directly, no linear search
-
-// Then how does the board's representation get updated?
-
-// Maybe the Piece provides callbacks that get stored in the board arrays, getPiece().doSomething()?
-// JS objects are stored as references, board[i][j] = newPawn; pieces.push(newPawn)
-// This logic probably lives in the game manager?
+// On being added to the board, the board will read the piece's position and place it at that index
+// Maybe even in the Game.update(), so you only change the piece's position directly, and then the board handles keeping track of it's position
