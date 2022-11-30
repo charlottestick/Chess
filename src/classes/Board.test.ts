@@ -4,7 +4,7 @@ import { Coordinate } from '../types/Coordinate';
 describe('Board class', () => {
     describe('Given we instantiate the class', () => {
         let newBoard: Board;
-        beforeAll(() => {
+        beforeEach(() => {
             newBoard = new Board();
         });
 
@@ -30,7 +30,12 @@ describe('Board class', () => {
         describe.each([[{ x: 0, y: 0 }, 'R']])(
             'Given we call getSquareFromCoordinate with a cartesian coordinate',
             (coordinate: Coordinate, expected: string) => {
-                let square: string = newBoard.getSquareFromCoordinate(coordinate);
+                let square: string;
+                beforeEach(() => {
+                    newBoard = new Board();
+                    square = newBoard.getSquareFromCoordinate(coordinate);
+                });
+
                 it('should return the correct piece at that position', () => {
                     expect(square).toBe(expected);
                 });
