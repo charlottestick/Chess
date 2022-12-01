@@ -1,34 +1,39 @@
 import { Coordinate } from '../types/Coordinate';
 import { arrayCopier } from '../helpers/arrayCopier';
 import { Row, Squares, Square } from '../types/Squares';
-let axel = require('axel')
-
-const kingRow: Row = ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'];
-const pawnRow: Row = ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'];
-const emptyRow: Row = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];
+import { terminal as term } from 'terminal-kit';
+import { Piece } from './Piece';
 
 export class Board {
     squares: Squares;
 
     constructor() {
-        this.squares = [
-            arrayCopier(kingRow),
-            arrayCopier(pawnRow),
-            arrayCopier(emptyRow),
-            arrayCopier(emptyRow),
-            arrayCopier(emptyRow),
-            arrayCopier(emptyRow),
-            arrayCopier(pawnRow),
-            arrayCopier(kingRow)
-        ];
+        this.squares = [[], [], [], [], [], [], [], []];
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+                let newPiece = new Piece({ x: i, y: j });
+                this.squares[i][j] = new Square(newPiece);
+            }
+        }
     }
 
     public getSquareFromCoordinate(coord: Coordinate): Square {
         return this.squares[coord.x][coord.y];
     }
 
-    public display():void {
-        axel.bg(255,0,0);
-        axel.box(2,2,8,4);
+    public display(): void {
+        term.clear();
+
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+                if ((i + j) % 2 == 0) {
+                    term.bgWhite();
+                } else {
+                    term.bgBlack();
+                }
+                term('  ');
+            }
+            term.nextLine(1);
+        }
     }
 }

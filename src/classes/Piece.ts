@@ -1,8 +1,11 @@
 import { Coordinate } from '../types/Coordinate';
 import { PlayerColour } from '../types/PlayerColour';
 
+type PieceType = 'X' | 'P' | 'R' | 'N' | 'B' | 'Q' | 'K';
+
 export class Piece<PlayerColours = PlayerColour> {
     private _position: Coordinate;
+    private _type: PieceType = 'X';
     private _taken?: boolean;
     private readonly _playerColour?: PlayerColours;
     private _validMoves: Array<Coordinate> = [];
@@ -19,6 +22,11 @@ export class Piece<PlayerColours = PlayerColour> {
     get position(): Coordinate {
         return this._position;
     }
+
+    get type(): PieceType {
+        return this._type;
+    }
+
     get taken(): boolean {
         return this._taken || false;
     }
@@ -46,7 +54,6 @@ export class Piece<PlayerColours = PlayerColour> {
 // fakeBoard.push(newPiece);
 // let newDebugPiece = new DebugPiece();
 // fakeBoard.push(newDebugPiece);
-
 
 // Each piece holds its position, which player it's owned by, whether it's taken or not, maths for moving, array of valid moves
 
