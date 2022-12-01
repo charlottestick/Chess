@@ -1,10 +1,7 @@
 import { Coordinate } from '../types/Coordinate';
 import { arrayCopier } from '../helpers/arrayCopier';
-
-// Square type can be changed later to a proper class/type
-type Square = ' ' | 'P' | 'R' | 'N' | 'B' | 'Q' | 'K'; // Better to be explicit that implicit, squares can only contain valid pieces
-type Row = Array<Square>; // If code elsewhere tries to assign things that won't match these types, tsc won't let us compile/run it
-type Squares = Array<Row>;
+import { Row, Squares, Square } from '../types/Squares';
+let axel = require('axel')
 
 const kingRow: Row = ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'];
 const pawnRow: Row = ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'];
@@ -28,5 +25,10 @@ export class Board {
 
     public getSquareFromCoordinate(coord: Coordinate): Square {
         return this.squares[coord.x][coord.y];
+    }
+
+    public display():void {
+        axel.bg(255,0,0);
+        axel.box(2,2,8,4);
     }
 }
