@@ -34,17 +34,19 @@ export class Piece<PlayerColours = PlayerColour> {
 }
 
 // Proof of Concept that subclasses of Piece can be stored in Array<Piece>
-export class DebugPiece extends Piece {
-    constructor() {
-        super({ x: 0, y: 0 });
-    }
-}
 
-let fakeBoard: Array<Piece> = [];
-let newPiece = new Piece({ x: 0, y: 0 });
-fakeBoard.push(newPiece);
-let newDebugPiece = new DebugPiece();
-fakeBoard.push(newDebugPiece);
+// class DebugPiece extends Piece {
+//     constructor() {
+//         super({ x: 0, y: 0 });
+//     }
+// }
+
+// let fakeBoard: Array<Piece> = [];
+// let newPiece = new Piece({ x: 0, y: 0 });
+// fakeBoard.push(newPiece);
+// let newDebugPiece = new DebugPiece();
+// fakeBoard.push(newDebugPiece);
+
 
 // Each piece holds its position, which player it's owned by, whether it's taken or not, maths for moving, array of valid moves
 
