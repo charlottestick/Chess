@@ -3,7 +3,7 @@ import { Piece } from '../classes/Piece';
 export class Square {
     private background?: string;
     private highlighted: boolean = false;
-    private piece?: Piece;
+    public piece?: Piece;
 
     constructor(newPiece?: Piece) {
         this.piece = newPiece;

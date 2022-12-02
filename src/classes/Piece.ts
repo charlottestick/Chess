@@ -10,8 +10,8 @@ export class Piece<PlayerColours = PlayerColour> {
     private readonly _playerColour?: PlayerColours;
     private _validMoves: Array<Coordinate> = [];
 
-    constructor(coordinate: Coordinate, colour?: PlayerColours) {
-        this._position = coordinate;
+    constructor(x: number, y: number, colour?: PlayerColours) {
+        this._position = { x, y };
         this._playerColour = colour || undefined;
     }
 
