@@ -2,6 +2,7 @@ import { Squares, Square } from '../types/Squares';
 import { terminal as term } from 'terminal-kit';
 import { Piece } from './Piece';
 import { doubleFor } from '../helpers/doubleFor';
+import { Coordinate } from '../types/Coordinate';
 
 export class Board {
     squares: Squares;
@@ -18,7 +19,23 @@ export class Board {
     }
 
     public getSquare(x: number, y: number): Square {
-        return this.squares[x][y];
+        return this.squares[y][x];
+    }
+    public getPiece(x: number, y: number): Piece | undefined {
+        return this.getSquare(x, y).piece;
+    }
+
+    public update(): void {
+        this.display();
+
+        doubleFor((i: number, j: number) => {
+            let currentPiece: Piece | undefined = this.getSquare(j, i).piece;
+            if (currentPiece) {
+                let actualPosition: Coordinate = currentPiece.position;
+                if (actualPosition.x != j || actualPosition.y != i) this.getSquare(j, i).piece = undefined;
+                this.getSquare(actualPosition.x, actualPosition.y).piece = currentPiece;
+            }
+        });
     }
 
     public display(): void {
@@ -34,7 +51,7 @@ export class Board {
                     term.white();
                 }
                 term(' ');
-                let currentPiece: Piece | undefined = this.getSquare(i, j).piece;
+                let currentPiece: Piece | undefined = this.getPiece(j, i);
                 currentPiece ? term(currentPiece.type) : term(' ');
                 term(' ');
             },

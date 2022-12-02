@@ -15,8 +15,8 @@ export class Piece<PlayerColours = PlayerColour> {
         this._playerColour = colour || undefined;
     }
 
-    public move(coordinate: Coordinate): void {
-        this._position = coordinate;
+    public move(x: number, y: number): void {
+        this._position = { x, y };
     }
 
     get position(): Coordinate {
