@@ -1,8 +1,8 @@
 export function doubleFor(eachColumn: Function, eachRow?: Function): void {
-    for (let i = 0; i < 8; i++) {
-        for (let j = 0; j < 8; j++) {
-            eachColumn(i, j);
+    for (let y = 0; y < 8; y++) {
+        for (let x = 0; x < 8; x++) {
+            eachColumn(x, y);
         }
-        eachRow ? eachRow(i) : undefined;
+        eachRow ? eachRow(y) : undefined;
     }
 }

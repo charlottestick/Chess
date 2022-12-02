@@ -9,12 +9,12 @@ export class Board {
 
     constructor() {
         this.squares = [[], [], [], [], [], [], [], []];
-        doubleFor((i: number, j: number) => {
+        doubleFor((x: number, y: number) => {
             let newPiece: Piece | undefined = undefined;
-            if (i == 0 || i == 1 || i == 6 || i == 7) {
-                newPiece = new Piece(i, j);
+            if (y == 0 || y == 1 || y == 6 || y == 7) {
+                newPiece = new Piece(x, y);
             }
-            this.squares[i][j] = new Square(newPiece);
+            this.squares[y][x] = new Square(newPiece);
         });
     }
 
@@ -24,34 +24,39 @@ export class Board {
     public getPiece(x: number, y: number): Piece | undefined {
         return this.getSquare(x, y).piece;
     }
+    public placePiece(x: number, y: number, piece: Piece) {
+        this.getSquare(x, y).piece = piece;
+    }
+    public removePiece(x: number, y: number): void {
+        this.getSquare(x, y).piece = undefined;
+    }
 
     public update(): void {
-        this.display();
-
-        doubleFor((i: number, j: number) => {
-            let currentPiece: Piece | undefined = this.getSquare(j, i).piece;
+        doubleFor((x: number, y: number) => {
+            let currentPiece: Piece | undefined = this.getPiece(x, y);
             if (currentPiece) {
                 let actualPosition: Coordinate = currentPiece.position;
-                if (actualPosition.x != j || actualPosition.y != i) this.getSquare(j, i).piece = undefined;
-                this.getSquare(actualPosition.x, actualPosition.y).piece = currentPiece;
+                if (actualPosition.x != x || actualPosition.y != y) {
+                    this.placePiece(actualPosition.x, actualPosition.y, currentPiece);
+                    this.removePiece(x, y);
+                }
             }
         });
+        this.display();
     }
 
     public display(): void {
         term.clear();
-
+        term.black();
         doubleFor(
-            (i: number, j: number) => {
-                if ((i + j) % 2 == 0) {
+            (x: number, y: number) => {
+                if ((x + y) % 2 == 0) {
                     term.bgWhite();
-                    term.black();
                 } else {
-                    term.bgBlack();
-                    term.white();
+                    term.bgGreen();
                 }
                 term(' ');
-                let currentPiece: Piece | undefined = this.getPiece(j, i);
+                let currentPiece: Piece | undefined = this.getPiece(x, y);
                 currentPiece ? term(currentPiece.type) : term(' ');
                 term(' ');
             },
@@ -59,5 +64,7 @@ export class Board {
                 term.nextLine(1);
             }
         );
+        term.bgDefaultColor();
+        term.defaultColor();
     }
 }
