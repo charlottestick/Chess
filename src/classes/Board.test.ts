@@ -1,7 +1,7 @@
 import { Board } from './Board';
 import { Coordinate } from '../types/Coordinate';
-import { Square } from '../types/Squares';
 import { Piece } from './Piece';
+import { Square } from './Square';
 
 function createSquareWithPiece(x: number, y: number): Square {
     return new Square(new Piece(x, y));
@@ -25,8 +25,10 @@ describe('Board class', () => {
             expect(newBoard.squares[0]).not.toBe(newBoard.squares[7]);
         });
 
+        describe('and we call ', () => {});
+
         describe.each([[{ x: 0, y: 0 }, createSquareWithPiece(0, 0)]])(
-            'Given we call getSquareFromCoordinate with a cartesian coordinate',
+            'Given we call getSquare with a cartesian coordinate',
             (coordinate: Coordinate, expected: Square) => {
                 let square: Square;
                 beforeEach(() => {

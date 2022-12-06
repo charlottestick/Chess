@@ -1,8 +1,9 @@
-import { Squares, Square } from '../types/Squares';
+import { Squares } from '../types/Squares';
 import { terminal as term } from 'terminal-kit';
 import { Piece } from './Piece';
 import { doubleFor } from '../helpers/doubleFor';
 import { Coordinate } from '../types/Coordinate';
+import { Square } from './Square';
 
 export class Board {
     squares: Squares;
@@ -14,7 +15,8 @@ export class Board {
             if (y == 0 || y == 1 || y == 6 || y == 7) {
                 newPiece = new Piece(x, y);
             }
-            this.squares[y][x] = new Square(newPiece);
+            this.squares[y][x] = new Square();
+            newPiece ? this.placePiece(x, y, newPiece) : undefined;
         });
     }
 
