@@ -1,11 +1,11 @@
-import { Board } from './classes/Board';
 import { Piece } from './classes/Piece';
+import { Game } from './classes/Game';
 
-let newBoard = new Board();
-newBoard.update();
+let game = new Game();
+game.update();
 
-let piece: Piece | undefined = newBoard.getPiece(2, 1);
+let piece: Piece | undefined = game.board.getPiece(2, 1);
 piece ? piece.move(2, 4) : undefined;
-console.log(newBoard.getPiece(2, 1));
-console.log(newBoard.getPiece(2, 1)?.position);
-newBoard.update();
+console.log(game.board.getPiece(2, 1));
+console.log(game.board.getPiece(2, 1)?.position);
+game.update();

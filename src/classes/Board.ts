@@ -11,12 +11,7 @@ export class Board {
     constructor() {
         this.squares = [[], [], [], [], [], [], [], []];
         doubleFor((x: number, y: number) => {
-            let newPiece: Piece | undefined = undefined;
-            if (y == 0 || y == 1 || y == 6 || y == 7) {
-                newPiece = new Piece(x, y);
-            }
             this.squares[y][x] = new Square();
-            newPiece ? this.placePiece(x, y, newPiece) : undefined;
         });
     }
 
