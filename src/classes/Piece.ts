@@ -3,16 +3,16 @@ import { PlayerColour } from '../types/PlayerColour';
 
 type PieceType = 'X' | 'P' | 'R' | 'N' | 'B' | 'Q' | 'K';
 
-export class Piece<PlayerColours = PlayerColour> {
+export class Piece {
     private _position: Coordinate;
     private _type: PieceType = 'X';
     private _taken?: boolean;
-    private readonly _playerColour?: PlayerColours;
+    private readonly _playerColour: PlayerColour;
     private _validMoves: Array<Coordinate> = [];
 
-    constructor(x: number, y: number, colour?: PlayerColours) {
+    constructor(x: number, y: number, colour?: PlayerColour) {
         this._position = { x, y };
-        this._playerColour = colour || undefined;
+        this._playerColour = colour || 'black';
     }
 
     public move(x: number, y: number): void {
@@ -33,7 +33,7 @@ export class Piece<PlayerColours = PlayerColour> {
     set taken(newState: boolean) {
         this._taken = newState;
     }
-    get playerColour(): PlayerColours | undefined {
+    get playerColour(): PlayerColour {
         return this._playerColour;
     }
     get validMoves(): Array<Coordinate> {

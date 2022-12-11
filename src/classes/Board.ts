@@ -6,12 +6,16 @@ import { Coordinate } from '../types/Coordinate';
 import { Square } from './Square';
 
 export class Board {
-    squares: Squares;
+    private squares: Squares;
 
     constructor() {
         this.squares = [[], [], [], [], [], [], [], []];
         doubleFor((x: number, y: number) => {
-            this.squares[y][x] = new Square();
+            if ((x + y) % 2 == 0) {
+                this.squares[y][x] = new Square('brightBlack');
+            } else {
+                this.squares[y][x] = new Square('cyan');
+            }
         });
     }
 
@@ -47,19 +51,16 @@ export class Board {
         term.black();
         doubleFor(
             (x: number, y: number) => {
-                if ((x + y) % 2 == 0) {
-                    term.bgWhite();
-                } else {
-                    term.bgGreen();
-                }
+                term.bgColor(this.getSquare(x, y).background);
                 term(' ');
                 let currentPiece: Piece | undefined = this.getPiece(x, y);
-                currentPiece ? term(currentPiece.type) : term(' ');
+                currentPiece ? term.color(currentPiece.playerColour, currentPiece.type) : term(' ');
                 term(' ');
             },
             () => {
                 term.nextLine(1);
-            }
+            },
+            true
         );
         term.bgDefaultColor();
         term.defaultColor();
