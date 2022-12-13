@@ -1,12 +1,13 @@
 import { Coordinate } from '../types/Coordinate';
 import { PlayerColour } from '../types/PlayerColour';
+import { doubleFor } from '../helpers/doubleFor';
 
 type PieceType = 'X' | 'P' | 'R' | 'N' | 'B' | 'Q' | 'K';
 
 export class Piece {
     private _position: Coordinate;
     private _type: PieceType = 'X';
-    private _taken?: boolean;
+    private _taken?: boolean; // Necessary?
     private readonly _playerColour: PlayerColour;
     private _validMoves: Array<Coordinate> = [];
 
@@ -38,6 +39,17 @@ export class Piece {
     }
     get validMoves(): Array<Coordinate> {
         return this._validMoves;
+    }
+
+    public findValidMoves(): void {
+        this._validMoves = [];
+        doubleFor(
+            (x: number, y: number): void => {
+                this._validMoves.push({ x, y });
+            },
+            (): void => {},
+            true
+        );
     }
 }
 

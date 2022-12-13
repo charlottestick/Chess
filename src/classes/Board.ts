@@ -6,10 +6,9 @@ import { Coordinate } from '../types/Coordinate';
 import { Square } from './Square';
 
 export class Board {
-    private squares: Squares;
+    private _squares: Squares = [[], [], [], [], [], [], [], []];
 
     constructor() {
-        this.squares = [[], [], [], [], [], [], [], []];
         doubleFor((x: number, y: number) => {
             if ((x + y) % 2 == 0) {
                 this.squares[y][x] = new Square('brightBlack');
@@ -19,6 +18,10 @@ export class Board {
         });
     }
 
+    get squares(): Squares {
+        // squares is readonly, so the array elements can be changed but the array itself can't be deleted for example
+        return this._squares;
+    }
     public getSquare(x: number, y: number): Square {
         return this.squares[y][x];
     }
@@ -38,6 +41,8 @@ export class Board {
             if (currentPiece) {
                 let actualPosition: Coordinate = currentPiece.position;
                 if (actualPosition.x != x || actualPosition.y != y) {
+                    // How do we test this block?
+                    // Side note: check coverage report to see what needs to be tested
                     this.placePiece(actualPosition.x, actualPosition.y, currentPiece);
                     this.removePiece(x, y);
                 }
@@ -47,6 +52,9 @@ export class Board {
     }
 
     public display(): void {
+        // Is there anyway to test terminal-kit integrations?
+        // Mocking the module and checking function calls?
+        // Had trouble with mock modules before, couldn't get it working
         term.clear();
         term.black();
         doubleFor(

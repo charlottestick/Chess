@@ -4,7 +4,9 @@ import { Piece } from './Piece';
 import { Square } from './Square';
 
 function createSquareWithPiece(x: number, y: number): Square {
-    return new Square(new Piece(x, y));
+    let square = new Square('black');
+    square.piece = new Piece(x, y);
+    return square;
 }
 
 describe('Board class', () => {

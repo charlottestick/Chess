@@ -7,12 +7,6 @@ describe('Piece class', () => {
             newPiece = new Piece(0, 0); // reinitialise before each test, more independence
         });
 
-        it('should have a position property', () => {
-            expect(newPiece).toHaveProperty('_position');
-        });
-        it('should have a move method', () => {
-            expect(newPiece).toHaveProperty('move');
-        });
         it('should initialise position to a default of 0, 0', () => {
             expect(newPiece.position).toEqual({ x: 0, y: 0 });
         });
@@ -23,6 +17,21 @@ describe('Piece class', () => {
             });
             it('should be in the specified position', () => {
                 expect(newPiece.position).toEqual({ x: 2, y: 3 });
+            });
+        });
+
+        describe('and we call findValidMoves', () => {
+            it('should populate the array with all coordinates on the board', () => {
+                newPiece.findValidMoves();
+                expect(newPiece.validMoves).toHaveLength(64);
+                expect(newPiece.validMoves).toContainEqual({ x: 0, y: 0 });
+                expect(newPiece.validMoves).toContainEqual({ x: 7, y: 7 });
+                expect(newPiece.validMoves).toContainEqual({ x: 4, y: 6 });
+            });
+            it('should remove previous valid moves when called again', () => {
+                newPiece.findValidMoves();
+                newPiece.findValidMoves();
+                expect(newPiece.validMoves).toHaveLength(64);
             });
         });
     });
