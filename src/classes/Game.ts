@@ -2,7 +2,10 @@ import { Board } from './Board';
 import { Piece } from './Piece';
 import { doubleFor } from '../helpers/doubleFor';
 import { terminal as term } from 'terminal-kit';
-import { PlayerColour } from '../types/PlayerColour';
+import { Coordinate } from '../types/Coordinate';
+
+type MouseEvent = { x: number; y: number; ctr: boolean; alt: boolean; shift: boolean };
+type KeyboardEvent = { isCharacter: boolean; codepoint: number; code: number | Buffer };
 
 export class Game {
     board: Board;
@@ -35,17 +38,46 @@ export class Game {
         this.board.update();
     }
 
-    public registerMouseEvents() {
+    public grabInputEvents() {
         term.grabInput({ mouse: 'button' });
-
-        term.on('mouse', (name: any, data: any) => {
-            console.log('mouse event: ', name, data);
-        });
+        term.on('key', this.onKeyboardEvent);
+        term.on('mouse', this.onMouseEvent);
     }
 
-    public registerKeyboardEvents() {} // Need to register CTR-C keybind for exiting application
+    public onMouseEvent(event: string, data: MouseEvent): void {
+        if (event == 'MOUSE_LEFT_BUTTON_PRESSED') {
+            let mouseBoardPosition: Coordinate = { x: data.x - 1, y: data.y - 1 };
+            mouseBoardPosition.x = Math.floor(mouseBoardPosition.x / 3);
+            mouseBoardPosition.y = 7 - mouseBoardPosition.y;
+            // Error checking
+            // Is this mapped position actually on the board?
+            // Does it match the array indexing?
 
-    public grabInputs() {}
+            // Other thoughts
+            // How does this input get passed around to where it needs to be?
+            // Store it in an attribute and read it in update?
+            // Input only needs to be read during certain game states?
+            // Where does it need to be?
+
+            // Pseudocode
+            // square = this.board.getSquare(mouseBoardPosition)
+            // square.highlighted = true
+
+            // #In Board display function
+            // for each square
+            // if square.highlighted
+            // set light or dark background colour
+            term.moveTo(1, 9);
+            console.log('Mouse position: ', data.x, ', ', data.y);
+            console.log('Board position: ', mouseBoardPosition.x, ', ', mouseBoardPosition.y);
+        }
+    }
+
+    public onKeyboardEvent(key: string, matches: Array<string>, data: KeyboardEvent): void {
+        if (key === 'CTRL_C') {
+            process.exit();
+        }
+    }
 }
 
 // trying to figure out what I need for this class, and how the logic will fit into OOP, pseudocoding with comments and unused members
