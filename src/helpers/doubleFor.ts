@@ -6,7 +6,9 @@ export function doubleFor(eachColumn: ColumnFunc, eachRow?: RowFunc, invertY: bo
         for (let x = 0; x < 8; x++) {
             eachColumn(x, y);
         }
-        eachRow ? eachRow(y) : undefined;
+        if (eachRow) {
+            eachRow(y);
+        }
     }
 
     if (invertY) {

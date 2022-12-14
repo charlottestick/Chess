@@ -34,5 +34,25 @@ describe('Piece class', () => {
                 expect(newPiece.validMoves).toHaveLength(64);
             });
         });
+
+        describe('and we access properties', () => {
+            it('should get type', () => {
+                expect(newPiece.type).toBe('X');
+            });
+            it('should get PlayerColour', () => {
+                expect(newPiece.playerColour).toBe('black');
+            });
+            it('should get position', () => {
+                expect(newPiece.position).toEqual({ x: 0, y: 0 });
+            });
+            it('should get validMoves', () => {
+                expect(newPiece.validMoves).toEqual([]);
+            });
+            it('should set and get taken', () => {
+                expect(newPiece.taken).toBe(false);
+                newPiece.taken = true;
+                expect(newPiece.taken).toBe(true);
+            });
+        });
     });
 });

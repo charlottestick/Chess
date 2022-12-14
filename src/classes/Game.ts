@@ -20,10 +20,10 @@ export class Game {
         doubleFor((x: number, y: number): void => {
             if (y == 0 || y == 1) {
                 let newPiece = new Piece(x, y, 'white');
-                this.board.placePiece(x, y, newPiece);
+                this.board.placePiece(newPiece);
             } else if (y == 6 || y == 7) {
                 let newPiece = new Piece(x, y, 'black');
-                this.board.placePiece(x, y, newPiece);
+                this.board.placePiece(newPiece);
             }
         });
     }
@@ -34,6 +34,18 @@ export class Game {
         // Highlight valid moves for that piece
         this.board.update();
     }
+
+    public registerMouseEvents() {
+        term.grabInput({ mouse: 'button' });
+
+        term.on('mouse', (name: any, data: any) => {
+            console.log('mouse event: ', name, data);
+        });
+    }
+
+    public registerKeyboardEvents() {} // Need to register CTR-C keybind for exiting application
+
+    public grabInputs() {}
 }
 
 // trying to figure out what I need for this class, and how the logic will fit into OOP, pseudocoding with comments and unused members

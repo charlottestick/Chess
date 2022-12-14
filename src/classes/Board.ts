@@ -28,8 +28,8 @@ export class Board {
     public getPiece(x: number, y: number): Piece | undefined {
         return this.getSquare(x, y).piece;
     }
-    public placePiece(x: number, y: number, piece: Piece) {
-        this.getSquare(x, y).piece = piece;
+    public placePiece(piece: Piece) {
+        this.getSquare(piece.position.x, piece.position.y).piece = piece;
     }
     public removePiece(x: number, y: number): void {
         this.getSquare(x, y).piece = undefined;
@@ -43,7 +43,7 @@ export class Board {
                 if (actualPosition.x != x || actualPosition.y != y) {
                     // How do we test this block?
                     // Side note: check coverage report to see what needs to be tested
-                    this.placePiece(actualPosition.x, actualPosition.y, currentPiece);
+                    this.placePiece(currentPiece);
                     this.removePiece(x, y);
                 }
             }
