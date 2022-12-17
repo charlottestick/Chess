@@ -88,17 +88,14 @@ export class Game {
             }
             // console.log('On the board: true');
 
-            if (
-                this.moveState === 'SELECTING_PIECE' &&
-                this.board.getPiece(mouseBoardPosition.x, mouseBoardPosition.y)
-            ) {
+            if (this.moveState === 'SELECTING_PIECE' && this.board.getPiece(mouseBoardPosition)) {
                 this.selectedPosition = mouseBoardPosition;
-                this.board.getSquare(mouseBoardPosition.x, mouseBoardPosition.y).highlighted = true;
+                this.board.getSquare(mouseBoardPosition).highlighted = true;
                 this.moveState = 'MOVING_PIECE';
             } else if (this.moveState === 'MOVING_PIECE') {
-                let square = this.board.getSquare(this.selectedPosition.x, this.selectedPosition.y);
+                let square = this.board.getSquare(this.selectedPosition);
                 square.highlighted = false;
-                square.piece?.move(mouseBoardPosition.x, mouseBoardPosition.y);
+                square.piece?.move(mouseBoardPosition);
                 this.moveState = 'SELECTING_PIECE';
             }
         }

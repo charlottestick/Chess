@@ -22,29 +22,29 @@ export class Board {
         // squares is readonly, so the array elements can be changed but the array itself can't be deleted for example
         return this._squares;
     }
-    public getSquare(x: number, y: number): Square {
-        return this.squares[y][x];
+    public getSquare(position: Coordinate): Square {
+        return this.squares[position.y][position.x];
     }
-    public getPiece(x: number, y: number): Piece | undefined {
-        return this.getSquare(x, y).piece;
+    public getPiece(position: Coordinate): Piece | undefined {
+        return this.getSquare(position).piece;
     }
     public placePiece(piece: Piece) {
-        this.getSquare(piece.position.x, piece.position.y).piece = piece;
+        this.getSquare(piece.position).piece = piece;
     }
-    public removePiece(x: number, y: number): void {
-        this.getSquare(x, y).piece = undefined;
+    public removePiece(position: Coordinate): void {
+        this.getSquare(position).piece = undefined;
     }
 
     public update(): void {
         doubleFor((x: number, y: number) => {
-            let currentPiece: Piece | undefined = this.getPiece(x, y);
+            let currentPiece: Piece | undefined = this.getPiece({ x, y });
             if (currentPiece) {
                 let actualPosition: Coordinate = currentPiece.position;
                 if (actualPosition.x != x || actualPosition.y != y) {
                     // How do we test this block?
                     // Side note: check coverage report to see what needs to be tested
                     this.placePiece(currentPiece);
-                    this.removePiece(x, y);
+                    this.removePiece({ x, y });
                 }
             }
         });
@@ -58,7 +58,7 @@ export class Board {
         term.moveTo(1, 1);
         doubleFor(
             (x: number, y: number) => {
-                let square: Square = this.getSquare(x, y);
+                let square: Square = this.getSquare({ x, y });
                 if (square.highlighted) {
                     if (square.background === 'light') {
                         term.bgGreen();
@@ -73,7 +73,7 @@ export class Board {
                     }
                 }
                 term(' ');
-                let currentPiece: Piece | undefined = this.getPiece(x, y);
+                let currentPiece: Piece | undefined = this.getPiece({ x, y });
                 currentPiece ? term.color(currentPiece.playerColour, currentPiece.type) : term(' ');
                 term(' ');
                 term.styleReset();

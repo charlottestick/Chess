@@ -16,8 +16,8 @@ export class Piece {
         this._playerColour = colour || 'black';
     }
 
-    public move(x: number, y: number): void {
-        this._position = { x, y };
+    public move(position: Coordinate): void {
+        this._position = position;
     }
 
     get position(): Coordinate {

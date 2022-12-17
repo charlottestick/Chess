@@ -13,7 +13,7 @@ describe('Piece class', () => {
 
         describe('and we call move with a position', () => {
             beforeEach(() => {
-                newPiece.move(2, 3);
+                newPiece.move({ x: 2, y: 3 });
             });
             it('should be in the specified position', () => {
                 expect(newPiece.position).toEqual({ x: 2, y: 3 });
