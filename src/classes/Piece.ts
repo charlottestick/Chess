@@ -6,7 +6,7 @@ type PieceType = 'X' | 'P' | 'R' | 'N' | 'B' | 'Q' | 'K';
 
 export class Piece {
     private _position: Coordinate;
-    private _type: PieceType = 'X';
+    protected _type: PieceType = 'X';
     private _taken?: boolean; // Necessary?
     private readonly _playerColour: PlayerColour;
     private _validMoves: Array<Coordinate> = [];

@@ -11,9 +11,9 @@ export class Board {
     constructor() {
         doubleFor((x: number, y: number) => {
             if ((x + y) % 2 == 0) {
-                this.squares[y][x] = new Square('brightBlack');
+                this.squares[y][x] = new Square('dark');
             } else {
-                this.squares[y][x] = new Square('cyan');
+                this.squares[y][x] = new Square('light');
             }
         });
     }
@@ -55,22 +55,33 @@ export class Board {
         // Is there anyway to test terminal-kit integrations?
         // Mocking the module and checking function calls?
         // Had trouble with mock modules before, couldn't get it working
-        term.clear();
-        term.black();
+        term.moveTo(1, 1);
         doubleFor(
             (x: number, y: number) => {
-                term.bgColor(this.getSquare(x, y).background);
+                let square: Square = this.getSquare(x, y);
+                if (square.highlighted) {
+                    if (square.background === 'light') {
+                        term.bgGreen();
+                    } else {
+                        term.bgRed();
+                    }
+                } else {
+                    if (square.background === 'light') {
+                        term.bgCyan();
+                    } else {
+                        term.bgBrightBlack();
+                    }
+                }
                 term(' ');
                 let currentPiece: Piece | undefined = this.getPiece(x, y);
                 currentPiece ? term.color(currentPiece.playerColour, currentPiece.type) : term(' ');
                 term(' ');
+                term.styleReset();
             },
             () => {
                 term.nextLine(1);
             },
             true
         );
-        term.bgDefaultColor();
-        term.defaultColor();
     }
 }
