@@ -1,19 +1,20 @@
 import { Coordinate } from '../types/Coordinate';
 import { PlayerColour } from '../types/PlayerColour';
 import { doubleFor } from '../helpers/doubleFor';
-
-type PieceType = 'X' | 'P' | 'R' | 'N' | 'B' | 'Q' | 'K';
+import { PieceType } from '../types/PieceType';
 
 export class Piece {
-    private _position: Coordinate;
-    protected _type: PieceType = 'X';
+    private _position: Coordinate; // Typescript supports user defined types including objects
+    protected _type: PieceType = 'X'; // Protected so that the child classes can write to it but otherwise still acts as private
     private _taken?: boolean; // Necessary?
     private readonly _playerColour: PlayerColour;
     private _validMoves: Array<Coordinate> = [];
 
     constructor(x: number, y: number, colour?: PlayerColour) {
+        // Question mark means colour parameter is optional and could be undefined
         this._position = { x, y };
         this._playerColour = colour || 'black';
+        // _playerColour type doesn't include undefined, so we have to provide a default if colour is falsy
     }
 
     public move(position: Coordinate): void {
@@ -47,7 +48,7 @@ export class Piece {
             (x: number, y: number): void => {
                 this._validMoves.push({ x, y });
             },
-            (): void => {},
+            undefined,
             true
         );
     }
