@@ -1,0 +1,7 @@
+@startuml
+class Square {
+string background
+boolean highlighted
+Piece piece
+}
+@enduml

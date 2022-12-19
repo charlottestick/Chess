@@ -1,0 +1,11 @@
+@startuml
+class Board {
+Squares squares
+void update()
+void display()
+Square getSquare(Coordinate position)
+Piece?getPiece(Coordinate position)
+void removePiece(Coordinate position)
+void placePiece(Piece piece)
+}
+@enduml

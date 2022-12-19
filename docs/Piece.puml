@@ -1,0 +1,11 @@
+@startuml
+class Piece {
+Coordinate position
+PieceType type
+boolean taken
+PlayerColour playerColour
+Array<Coordinate> validMoves
+void move(Coordinate position)
+void findValidMoves()
+}
+@enduml

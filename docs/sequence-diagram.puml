@@ -1,0 +1,52 @@
+@startuml
+participant Index
+participant Game
+participant Board
+participant Square
+participant Piece
+participant "terminal-kit" as term
+
+Index -> Game: Instantiate
+Game -> Board: Instantiate
+Board -> Square: Instantiate light
+Board -> Square: Instantiate dark
+Game -> Piece: Instantiate pieces
+Game -> Board: Place pieces
+Index -> Game: Start game loop
+Game -> term: Clear the screen and hide the cursor
+Game -> term: Register input event handlers and enter terminal raw mode
+Game -> Game: Update game
+
+==Update game==
+Game -> Game: Check for game end
+Game -> Board: Update board
+Board -> Piece: Update pieces
+Board -> Piece: Get piece character\nrepresentations
+Piece -> Board: Return piece character\nrepresentations
+Board -> term: Display squares and pieces
+Board -> Game
+Game -> Game: Update game
+
+==Moving a piece==
+term -> Game: onMouseEvent callback
+Game -> Game: Map screen space position\nto game space position
+Game -> Board: Check for a piece at\nthe selected position
+Game -> Game: Store selected position
+Game -> Board: Highlight selected square
+Board -> Square: Set highlighted true
+Game -> Game: Set state to Moving
+...
+term -> Game: onMouseEvent callback
+Game -> Board: Get square
+Board -> Game: Return square
+Game -> Square: Set highlighted false
+Game -> Piece: Move piece to selected position
+Game -> Game: Set state to Selecting
+
+==Ending the game==
+term -> Game: onKeyboardEvent callback
+Game -> Game: Set game end true
+Game -> term: Clear screen and exit terminal raw mode
+Game -> Index
+
+@enduml

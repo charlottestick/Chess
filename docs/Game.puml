@@ -1,0 +1,19 @@
+@startuml
+class Game {
+Board board
+string moveState
+Coordinate selectedPosition
+boolean gameEnd
+void startGameLoop()
+void Update()
+void grabInputEvents()
+void onMouseEvent(string event, MouseEvent data)
+void onKeyboardEvent(string key)
+void placePawns()
+void placeRooks()
+void placeKnights()
+void placeBishops()
+void placeQueens()
+void placeKings()
+}
+@enduml
