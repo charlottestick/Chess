@@ -10,9 +10,9 @@ Then you can run the program with `node out/index.js`.
 ### Problem summary, proposed solution
 ### Class diagrams
 ![](docs/Game.svg)
+![](docs/Board.svg)
 ![](docs/Square.svg)
 ![](docs/Piece.svg)
-![](docs/Board.svg)
 ### Sequence diagram
 ![](docs/sequence-diagram.svg)
 ### Decomposition into epics
