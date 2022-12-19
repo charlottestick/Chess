@@ -9,6 +9,7 @@ import { Bishop } from './pieces/Bishop';
 import { Queen } from './pieces/Queen';
 import { King } from './pieces/King';
 import { MouseEvent } from '../types/MouseEvent';
+import { Square } from './Square';
 
 export class Game {
     // There is no underscore naming convention here as Game has no getters or setters as
@@ -43,7 +44,7 @@ export class Game {
         this.placeKings();
     }
 
-    public startGameLoop() {
+    public startGameLoop(): void {
         // Clear the screen so nothing leaks into the game screen from before the program started
         // and hide the cursor so the user doesn't see it jumping around when drawing
         term.clear();
@@ -52,7 +53,7 @@ export class Game {
         this.update();
     }
 
-    public update() {
+    public update(): void {
         if (!this.gameEnd) {
             this.board.update();
             // Game loop solution, based on terminal-kit's spaceship demo implementation, source:
@@ -63,7 +64,7 @@ export class Game {
         }
     }
 
-    public grabInputEvents() {
+    public grabInputEvents(): void {
         // grabInput puts the terminal in 'raw mode', during which ctrl-C doesn't kill the process,
         // so we have to manually handle that keybinding for ending the program
         // The mouse: button option enables receiving events for mouse button clicks
@@ -121,7 +122,7 @@ export class Game {
                 // Un-highlight the previous position
                 // Move the piece to the new position
                 // Toggle the state back
-                let square = this.board.getSquare(this.selectedPosition);
+                let square: Square = this.board.getSquare(this.selectedPosition);
                 square.highlighted = false;
                 square.piece?.move(gameSpacePosition); // question mark is typescript syntax for a possibly undefined object
                 // Typescript can't tell, but we will never be in the moving state unless we've selected a position with a piece on it,
@@ -144,14 +145,14 @@ export class Game {
         }
     }
 
-    private placeRooks() {
+    private placeRooks(): void {
         this.board.placePiece(new Rook(0, 0, 'white'));
         this.board.placePiece(new Rook(7, 0, 'white'));
         this.board.placePiece(new Rook(0, 7, 'black'));
         this.board.placePiece(new Rook(7, 7, 'black'));
     }
 
-    private placePawns() {
+    private placePawns(): void {
         doubleFor((x: number, y: number): void => {
             if (y === 1) {
                 this.board.placePiece(new Pawn(x, y, 'white'));
@@ -161,26 +162,26 @@ export class Game {
         });
     }
 
-    private placeKnights() {
+    private placeKnights(): void {
         this.board.placePiece(new Knight(1, 0, 'white'));
         this.board.placePiece(new Knight(6, 0, 'white'));
         this.board.placePiece(new Knight(1, 7, 'black'));
         this.board.placePiece(new Knight(6, 7, 'black'));
     }
 
-    private placeBishops() {
+    private placeBishops(): void {
         this.board.placePiece(new Bishop(2, 0, 'white'));
         this.board.placePiece(new Bishop(5, 0, 'white'));
         this.board.placePiece(new Bishop(2, 7, 'black'));
         this.board.placePiece(new Bishop(5, 7, 'black'));
     }
 
-    private placeQueens() {
+    private placeQueens(): void {
         this.board.placePiece(new Queen(3, 0, 'white'));
         this.board.placePiece(new Queen(3, 7, 'black'));
     }
 
-    private placeKings() {
+    private placeKings(): void {
         this.board.placePiece(new King(4, 0, 'white'));
         this.board.placePiece(new King(4, 7, 'black'));
     }
