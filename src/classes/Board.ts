@@ -53,12 +53,12 @@ export class Board {
             if (currentPiece) {
                 let actualPosition: Coordinate = currentPiece.position;
                 if (actualPosition.x != x || actualPosition.y != y) {
-                    // If the internal position is out of sync with the external postion
+                    // If the internal position is out of sync with the external position
                     // then we know the piece has moved,
                     // so we can re-sync it by placing it and removing the reference stored where it previously was
                     // if there was a piece already at the location moved to it's overwritten, so can be treated as taken
                     // In future development, this out of sync process means we could access the taken piece with the new coordinate
-                    // before it gets overwritten, and store it to a taken array to display to the users or we do other stuff with it
+                    // before it gets overwritten, and store it to a taken array to display to the users, or we do other stuff with it
 
                     // How do we test this block?
                     // Side note: check coverage report to see what needs to be tested
