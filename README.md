@@ -5,27 +5,94 @@ Alternatively run `npm install`, then `npm run build`
 to transpile from typescript to javascript in the `out` directory. 
 Then you can run the program with `node out/index.js`.
 
+Note: Replit.com seems to override the colours displayed in the terminal, which means that the white and black pieces are not coloured by which player 
+they belong to, but by the background colour of the square they're on. This is incredibly annoying, but I believe it's out of my control.
+
 ## Challenge outline
 
 ### Problem summary, proposed solution
+Problem definition: I am a bored software engineer, and I want to play chess with my colleague in my terminal.
+
+I've done academic game projects before and have always found defining the problem being solved by a game program not easy. Beyond the statement of just 'I want to play a game', 
+I think the definition should include some of the things that make this program unique from other games on the market, especially in this case as this is not a unique game idea 
+that I've come up with, but a re-implementation of an existing game, and I think running in a terminal is a good USP to distinguish my project from all the other chess programs 
+that exist (and from the other chess programs being made by students for this assignment). 
+
+For this game, the proposed requirements are:
+- Able to run in the terminal
+- Mouse inputs
+- Keyboard inputs
+- Pass and play turns
+- Show valid moves
+- Show the last move made
+- Show when a player is in check and show valid moves with this in consideration
+- Show when a player is in checkmate
+
+I had a few stretch goals including online multiplayer by sending chess notation moves to another connected chess client (potentially connecting with another student's chess 
+program if we could coordinate and agree on a protocol/contract for what information to send and receive) and singleplayer vs a basic cpu player using an A/B pruning algorithm 
+to decide which move is the most advantageous over several turns.
+
+My proposed solution was to use OOP in typescript and a node library for handling terminal UI functionality. OOP is a paradigm that lends itself well to game development, as 
+it's usually fairly intuitive to use classes to represent real world concepts in a program. For example, some obvious classes for a chess program are a Piece and a Board, and 
+inheritance can be used for more specific pieces like a Pawn. 
+
+I thought about using C++ as it has good OOP support and is typically used for games as its lower level control allows for better optimisation which helps with game performance, 
+but performance isn't a huge concern as chess isn't a realtime application like most modern games. Instead, I chose typescript as I had more familiarity with it from using it 
+at work, and I preferred the strict type system in TS to C++'s, as it includes features such as string literal types, union types, and type narrowing. These features make me 
+feel like the type system is working for me, helping to prevent potential errors from setting variables to things they shouldn't be set to, instead of working against me and 
+being difficult to work around. Javascript has OOP support, and typescript includes this by allowing classes as types for variables, but the support isn't as built-in and 
+well-rounded as it is in C++, as there are limitations like not being able to define multiple constructors for overloading.
+
+At the start of the project, I wasn't sure how I wanted to handle UI. I could have done it manually with console logging and some clever visual design choices, but I got inspired 
+by the Adaship example project, which runs in the terminal but uses colour and extended unicode characters for some fancier UI. For most programs I'd written in the past, I didn't know
+how to do a more refined command line UI, just a simple 'get input' & 'print string', so I wanted to do something more interactive and visually interesting & impressive. 
+
+I started doing some research into node libraries for displaying UI in the terminal, and came across a few viable-looking options including axel, blessed and terminal-kit. Blessed 
+seemed very powerful, providing a DOM-like API for creating a window & menu style UI inside the terminal using characters as pixels, but it seemed overcomplicated for the size of 
+project I was producing. Axel was similar in that it uses the terminal as a canvas, but has a much lower level approach, providing functions for drawing lines, boxes, and pixels.
+I started building a small proof of concept with axel to learn how it worked, but switched to terminal-kit when I started reading more about what it can do.
+
+Terminal-kit differed from axel by providing full TUI (terminal UI) functionality, which includes getting input from user, whereas axel seemed to be designed only for displaying 
+things on the screen. Blessed may have had similar input functions, but terminal-kit looked much simpler to use, and I found a series of tutorial blogs explaining the basics and the github
+repo provided some example projects which I drew some insight from. I'll talk more about implementing my UI with terminal-kit in the development sections.
+
 ### Class diagrams
 ![](docs/Game.svg)
 ![](docs/Board.svg)
 ![](docs/Square.svg)
 ![](docs/Piece.svg)
+
 ### Sequence diagram
 ![](docs/sequence-diagram.svg)
+
 ### Decomposition into epics
+// could put some miro screenshots in here, linked in the same way as the UML diagrams above
+
+Considered trying to a user story map to figure out what tasks are needed. Completed my interpretation/guesstimate of a user story map in a Miro board, but I 
+haven't actually got much experience in doing user story maps and I had only just started reading the book in preparation for another upcoming hobby game project.
+
+Brain-dumped some tasks & classes then grouped them into slices to determine priorities for the tasks
+
+Created simple tickets from these tasks and classes, and refined them with notes and thoughts as I went through, using a kanban board in Miro with a refined 
+column as a smaller, next-up backlog. Scrum sprints wouldn't really work for a project this short-running, so kanban style agile made more sense.
+
+- Board representation
+- Game manager
+- Movable pieces
 
 ## Development
+
 ### Good programming standards
-TDD, typescript, descriptive names, re-usability.
+TDD, typescript, descriptive names, re-usability. Keep things agnostic and flexible. Being agnostic makes it less coupled, and easier to refactor, extend, etc. Agnostic is my favourite word
+
+Tried to restrict terminal-kit calls to certain areas of the code, only where it makes sense. Only display and input functions should be aware of terminal-kit, startGameLoop counts as display 
+as it clears the screen on starting the program, Board.display(), Game.grabInputs(), and Game.onKeyboardEvent() are the only other functions that interact with it.
 
 ### First slice development
 For my first slice, I still wasn't decided on a technology for displaying my game, but I wanted to start building the components that would be 
 required whichever tech I chose. I thought about using Ports & Adapters (or Hexagonal) architecture to keep the logic highly decoupled from the UI, 
 as this would allow me to create internal functions that accept a callback to display with some injected UI adapter, and the game could be further developed 
-in the future to use a different UI technology if I wanted to. Further into the project, I decided not to use ports and adapters as it was extra design and 
+in the future to use a different UI technology if I wanted to. Later into the project, I decided not to use ports and adapters as it was extra design and 
 development work for advantages I wouldn't be able to take advantage of in getting marks for the project.
 
 However, I still saw benefit in building from the bottom up, creating the common functionality like the Board and Piece classes to store an internal 
