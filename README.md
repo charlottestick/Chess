@@ -216,9 +216,12 @@ the update functions and game loop, as I couldn't work out how to mock the termi
 to test the game loop and the logic in those functions was quite complex and state dependent. This maybe suggests that they should have been further broken
 down into methods for each step. If were to continue working on this program as a hobby project, getting rid of this tech debt would be high on my backlog.
 
-I wrote tests for the doubleFor helper function as it's quite critical and the callback pattern is a little unusual so there was a higher chance of getting something wrong
+I also wrote tests for the doubleFor helper function as it's quite critical and the callback pattern is a little unusual so there was a higher chance of getting something wrong.
 
-Wanted to do mutation testing but didn't think it was worth the time.
+Test coverage was a report that I looked at fairly often once I wasn't doing as much TDD, as I wanted to make sure that I was still testing everything even if it was after 
+developing the feature. However, test coverage only tells if a line of code was called by a test, it doesn't actually ensure that that line is tested properly, so I considered setting 
+up mutation testing, which changes random lines of code and checks for failing tests to ensure that that line of code was necessary to make tests pass, but didn't think it was worth it 
+with how little time I had.
 
 ### Effective use of advanced programming principles
 OOP, state machine, Observer variation with registering event listeners
