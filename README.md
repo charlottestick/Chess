@@ -103,7 +103,7 @@ attributes which didn't exist on an object. Because of this, I tried to always k
 the data object passed as an argument to onMouseEvent(), and I kept these types mostly separate from their main usage so that if another file needed to reference the type it could import 
 just the type definition instead of a whole unrelated class definition where it happened to first be used.
 
-One of my key principals was to keep things agnostic, in that most functions shouldn't be aware of or dependent on other parts of the program. Functions being agnostic makes them less coupled, 
+One of my key principles was to keep things agnostic, in that most functions shouldn't be aware of or dependent on other parts of the program. Functions being agnostic makes them less coupled, 
 and easier to refactor, extend, etc. For example, I tried to restrict terminal-kit calls to certain areas of the code, only where it makes sense. Only display and input functions should be aware 
 of terminal-kit, startGameLoop counts as display as it clears the screen on starting the program, Board.display(), Game.grabInputs(), and Game.onKeyboardEvent() are the only other functions 
 that interact with it. Looking back I could have extracted the terminal-kit integrations in startGameLoop and onKeyboardEvent to a startUI and endUI function, so that those methods don't 
@@ -224,4 +224,9 @@ up mutation testing, which changes random lines of code and checks for failing t
 with how little time I had.
 
 ### Effective use of advanced programming principles
-OOP, state machine, Observer variation with registering event listeners
+Throughout this project, I made use of several advance programming techniques, some of which were external requirements, but others which I found actually helpful in creating my own solutions. 
+OOP was required as part of the project brief, but it made sense for game development as I previously discussed, and provided a good structure for certain functions should go. I found that a 
+state machine was a pretty good solution for moving a piece, as it allowed the game to keep track of the two parts of making a move without having a long-running function or some other solution. 
+
+Terminal-kit also placed a requirement to use a variation of the observer pattern, as inputs are usually handled as events, and consumers of those events have to listen to a broadcaster of the event, 
+and subscribe with a callback function to be run whenever the event fires.
