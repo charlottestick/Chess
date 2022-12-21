@@ -57,36 +57,64 @@ things on the screen. Blessed may have had similar input functions, but terminal
 repo provided some example projects which I drew some insight from. I'll talk more about implementing my UI with terminal-kit in the development sections.
 
 ### Class diagrams
-![](docs/Game.svg)
-![](docs/Board.svg)
-![](docs/Square.svg)
-![](docs/Piece.svg)
+![](docs/uml/Game.svg)
+![](docs/uml/Board.svg)
+![](docs/uml/Square.svg)
+![](docs/uml/Piece.svg)
 
 ### Sequence diagram
-![](docs/sequence-diagram.svg)
+![](docs/uml/sequence-diagram.svg)
 
 ### Decomposition into epics
-// could put some miro screenshots in here, linked in the same way as the UML diagrams above
-
-Considered trying to a user story map to figure out what tasks are needed. Completed my interpretation/guesstimate of a user story map in a Miro board, but I 
+While planning, I considered trying to a user story map to figure out what tasks are needed. I completed my interpretation/guesstimate of a user story map in a Miro board, but I 
 haven't actually got much experience in doing user story maps and I had only just started reading the book in preparation for another upcoming hobby game project.
 
-Brain-dumped some tasks & classes then grouped them into slices to determine priorities for the tasks
+![](docs/user_story_map.png)
 
-Created simple tickets from these tasks and classes, and refined them with notes and thoughts as I went through, using a kanban board in Miro with a refined 
+Along with this, I brain-dumped some tasks & classes then grouped them into slices to determine priorities for the tasks.
+
+![](docs/braindump_tickets_and_slices.png)
+
+I created simple tickets from these tasks and classes, and refined them with notes and thoughts as I went through, using a kanban board in Miro with a refined 
 column as a smaller, next-up backlog. Scrum sprints wouldn't really work for a project this short-running, so kanban style agile made more sense.
 
+![](docs/kanban_board.png)
+
+The main epics were:
 - Board representation
 - Game manager
 - Movable pieces
 
+Afterwards, I also created a crude flowchart to plan out the sequence of events, orange stickies are tasks that were later cut out of the MVP.
+
+![](docs/flowchart.png)
+
 ## Development
 
 ### Good programming standards
-TDD, typescript, descriptive names, re-usability. Keep things agnostic and flexible. Being agnostic makes it less coupled, and easier to refactor, extend, etc. Agnostic is my favourite word
+I wanted to do test driven development for this project as I highly value the confidence it gives my that my code works as expected, eve if I go back and refactor or change something elsewhere 
+to work differently. This worked fine for the basic building block components like the Board, Square, and Piece classes as they had fairly simple inputs and outputs to their methods, which was a 
+benefit of building bottom up, but when it came to creating a game loop and handling UI integrations I had to stop using TDD as I was forced to be more experimental to work out how terminal-kit 
+worked and how I was going to have an update loop and I didn't know what outputs I was expecting or how to assert them.
 
-Tried to restrict terminal-kit calls to certain areas of the code, only where it makes sense. Only display and input functions should be aware of terminal-kit, startGameLoop counts as display 
-as it clears the screen on starting the program, Board.display(), Game.grabInputs(), and Game.onKeyboardEvent() are the only other functions that interact with it.
+I talked earlier about the benefits of typescript's type system, but they only add value if developers are strict with themselves about adding types on every member or variable, and I was quite 
+strict with this as I recently saw a problem with some code at work where a fake data generator in a test wasn't using the type the implementation was using, and the generator was creating 
+attributes which didn't exist on an object. Because of this, I tried to always keep types in mind when creating new attributes, methods and parameters, including creating a type for 
+the data object passed as an argument to onMouseEvent(), and I kept these types mostly separate from their main usage so that if another file needed to reference the type it could import 
+just the type definition instead of a whole unrelated class definition where it happened to first be used.
+
+One of my key principals was to keep things agnostic, in that most functions shouldn't be aware of or dependent on other parts of the program. Functions being agnostic makes them less coupled, 
+and easier to refactor, extend, etc. For example, I tried to restrict terminal-kit calls to certain areas of the code, only where it makes sense. Only display and input functions should be aware 
+of terminal-kit, startGameLoop counts as display as it clears the screen on starting the program, Board.display(), Game.grabInputs(), and Game.onKeyboardEvent() are the only other functions 
+that interact with it. Looking back I could have extracted the terminal-kit integrations in startGameLoop and onKeyboardEvent to a startUI and endUI function, so that those methods don't 
+directly interact with terminal-kit, display and grabInputs make sense to be calling terminal-kit as that is there purpose, but initialising the terminal and input mode is a side effect of 
+starting the game.
+
+The final small thing I kept in mid throughout development, was sensible naming for members. From work, I've learnt that it's always better to have a long function name that describes 
+exactly what it does than a short to type name that makes you have to open the function definition to understand what it does. Member names taking a long time to type should never be a problem 
+as the IDE's autocomplete should make this trivial and is still less likely to get a typo in the name than manually writing out a short name. If the function or variable names are descriptive, 
+then lines of code start to read like sentences and don't need as much messy commenting, because reading the line of code itself should describe what is happening. This makes renaming things 
+one of the most important refactors, and again the IDE can sometimes help with refactoring all usages of a variable name at once to reduce typos.
 
 ### First slice development
 For my first slice, I still wasn't decided on a technology for displaying my game, but I wanted to start building the components that would be 
@@ -130,8 +158,24 @@ Piece objects and didn't reference the DebugPiece class. The test worked as ther
 gave me more confidence in my designed solution.
 
 ### Second slice development
-Trying out some terminal UI libraries, first axel, then terminal-kit. Wanted to see a more concrete output of my program, to visualise the data 
-representations.
+For my second slice, I wanted to see a more concrete output of my program, to visualise the data representations, so I started researching terminal UI packages and how to use each one. 
+Axel seemed like the simplest to use at first, with functions for drawing simple shapes to the terminal, so I did some experimentation to start drawing a board, but while doing this I
+read about terminal-kit and how it could handle inputs as well as outputs. This seemed a lot more useful for my use case as I wanted to implement mouse controls, so I switched over to 
+using terminal-kit and implemented the board's display function to draw a black and white checkerboard to the screen.
+
+Then, I added logic to check if there was a piece at the square being drawn, and write its character representation instead of just an empty string, using the same background colour so 
+that the square is still the right colour. This brought to light the issue of contrast, as black pieces were obviously not visible on top of a black background, and white pieces would have a
+similar issue when I used the pieces colour attributes later on. For now the solution was to draw the foreground text in the opposite colour to tha background, but I continually re-evaluated 
+the background colours throughout this and the next slice (where I'd also have to think about highlighted squares having good contrast with the surrounding squares as well as the piece on 
+top of it), starting with green and grey, then moving to light blue and grey.
+
+I already knew that my solution for moving a piece around the board worked, as I had tested it manually with some hardcoded calls to the move and update functions, and now I could see that the 
+piece was moving to the correct position, so I wanted to start implementing input handlers. I started by creating a keyboard event handler for the ctrl-c key bind, to make sure I could still quit
+the program if it crashed. Then, I created a mouse event handler to explore how terminal-kit treated mouse inputs. I discovered that it treats the top left corner of the terminal as (1, 1), but 
+I wanted the coordinates to be more intuitive to someone used to graph coordinates, so my board starts from the bottom left corner at (0, 0). The squares on my board are also 3 characters wide 
+to make it more square shaped, but terminal-kit gives the position in terms of characters along and down the screen. This meant I had to map the mouse position in the event to a position on my 
+board, which involved dividing the x coordinate by 3 and discarding the remainder. In this slice, I just wanted to figure out how terminal-kit worked, so I was logging the event and the mapped 
+position to the console to see if it was working properly, and I would use the mapped position to move a piece later on in the next slice.
 
 ### Final slice development
 On the 17th December, with 4.5 days left, I felt like I wasn't going to finish my game with the originally planned features, 
@@ -172,11 +216,9 @@ the update functions and game loop, as I couldn't work out how to mock the termi
 to test the game loop and the logic in those functions was quite complex and state dependent. This maybe suggests that they should have been further broken
 down into methods for each step. If were to continue working on this program as a hobby project, getting rid of this tech debt would be high on my backlog.
 
-### Reflect on design challenges and solutions
+I wrote tests for the doubleFor helper function as it's quite critical and the callback pattern is a little unusual so there was a higher chance of getting something wrong
 
-## Evaluation
+Wanted to do mutation testing but didn't think it was worth the time.
 
-### Analysis with examples of refactors, reusability and code smells
 ### Effective use of advanced programming principles
-### Improved algorithms
-### Review, opportunities to improve and continued professional development
+OOP, state machine, Observer variation with registering event listeners
